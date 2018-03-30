@@ -1,0 +1,83 @@
+apply plugin: 'com.android.application'
+
+// Global configuration.
+def final appPackage = "com.incept.kidlearn"
+def final appVersion = "alpha"
+
+android {
+    compileSdkVersion 26
+
+    // Default application configuration.
+    defaultConfig {
+        applicationId appPackage
+        minSdkVersion 21
+        targetSdkVersion 26
+        versionCode 1
+        versionName appVersion
+        flavorDimensions "default"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    // Release/Production build configuration.
+    // Note: Including the passwords for your release key and keystore inside the build file is not
+    // a good security practice. Alternatively, you can configure the build file to obtain these
+    // passwords from environment variables or have the build process prompt you for these passwords.
+    // Reference: https://developer.android.com/studio/build/build-variants.html
+    signingConfigs {
+        release {
+            storeFile file("baseline-keystore")
+            storePassword "mindstix"
+            keyAlias "Mindstix Baseline"
+            keyPassword "mindstix"
+        }
+    }
+
+    // Application build variants/flavours.
+    productFlavors {
+        // Development environment configuration.
+        dev {
+            applicationIdSuffix ".dev"
+            versionNameSuffix "-dev"
+            buildTypes {
+                debug {
+                    minifyEnabled false
+                    debuggable true
+                }
+            }
+        }
+
+        // Production environment configuration.
+        prod {
+            buildTypes {
+                debug {
+                    minifyEnabled false
+                    debuggable true
+                }
+                release {
+                    minifyEnabled true
+                    debuggable false
+                    proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+                    signingConfig signingConfigs.release
+                }
+            }
+        }
+    }
+}
+
+// Application dependencies. Third party libraries will be added here.
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+
+    testImplementation 'junit:junit:4.12'
+
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    // Circular image view for profile picture.
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+
+    // For navigation drawer.
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:design:26.1.0'
+}

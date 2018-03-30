@@ -1,0 +1,4 @@
+<resources>
+    <!-- Application name for dev builds. Overwrites default application name. -->
+    <string name="app_name">Kid Learn</string>
+</resources>

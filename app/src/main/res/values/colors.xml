@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Profile screen color codes -->
+    <color name="color_profile_image_border">#000000</color>
+
+    <!-- Generic colors -->
+    <color name="color_button">#626262</color>
+</resources>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_20_dp"
+            android:orientation="vertical">
+
+            <!-- Profile image circular container -->
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profile_image"
+                android:layout_width="@dimen/dimen_120_dp"
+                android:layout_height="@dimen/dimen_120_dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/dimen_20_dp"
+                android:clickable="true"
+                android:src="@drawable/ic_camera"
+                app:civ_border_color="@color/color_profile_image_border"
+                app:civ_border_width="@dimen/dimen_2_dp" />
+
+            <!-- First name and last name container -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_20_dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <EditText
+                    android:id="@+id/profile_first_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:hint="@string/profile_first_name"
+                    android:singleLine="true"
+                    android:textSize="@dimen/font_size_20_sp" />
+
+                <EditText
+                    android:id="@+id/profile_last_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:hint="@string/profile_last_name"
+                    android:singleLine="true"
+                    android:textSize="@dimen/font_size_20_sp" />
+
+            </LinearLayout>
+
+            <!-- Date of birth field -->
+            <EditText
+                android:id="@+id/profile_dob"
+                android:layout_width="@dimen/dimen_200_dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dimen_20_dp"
+                android:hint="@string/profile_date_of_birth"
+                android:singleLine="true"
+                android:textSize="@dimen/font_size_20_sp" />
+
+        </LinearLayout>
+
+        <!-- Save profile button -->
+        <Button
+            android:id="@+id/profile_save_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="@dimen/dimen_20_dp"
+            android:background="@color/color_button"
+            android:text="@string/profile_save_button"
+            android:textSize="@dimen/font_size_20_sp" />
+
+    </LinearLayout>
+
+</ScrollView>

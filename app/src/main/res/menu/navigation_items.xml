@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_item_learning"
+            android:title="@string/nav_header_learning">
+
+            <menu>
+
+                <item
+                    android:id="@+id/nav_item_alphabets"
+                    android:checked="false"
+                    android:icon="@drawable/ic_alphabet"
+                    android:title="@string/nav_header_alphabets" />
+
+                <item
+                    android:id="@+id/nav_item_numbers"
+                    android:checked="false"
+                    android:icon="@drawable/ic_number"
+                    android:title="@string/nav_header_numbers" />
+
+                <item
+                    android:id="@+id/nav_item_colors"
+                    android:checked="false"
+                    android:icon="@drawable/ic_color"
+                    android:title="@string/nav_header_colors" />
+
+                <item
+                    android:id="@+id/nav_item_birds"
+                    android:checked="false"
+                    android:icon="@drawable/ic_bird"
+                    android:title="@string/nav_header_birds" />
+
+                <item
+                    android:id="@+id/nav_item_fruits"
+                    android:checked="false"
+                    android:icon="@drawable/ic_fruit"
+                    android:title="@string/nav_header_fruits" />
+
+                <item
+                    android:id="@+id/nav_item_animals"
+                    android:checked="false"
+                    android:icon="@drawable/ic_animal"
+                    android:title="@string/nav_header_animals" />
+
+                <item
+                    android:id="@+id/nav_item_shapes"
+                    android:checked="false"
+                    android:icon="@drawable/ic_shape"
+                    android:title="@string/nav_header_shapes" />
+
+                <item
+                    android:id="@+id/nav_item_vegetables"
+                    android:checked="false"
+                    android:icon="@drawable/ic_vegetable"
+                    android:title="@string/nav_header_vegetables" />
+
+                <item
+                    android:id="@+id/nav_item_stars"
+                    android:checked="false"
+                    android:icon="@drawable/ic_stars"
+                    android:title="@string/nav_header_stars" />
+
+                <item
+                    android:id="@+id/nav_item_body_parts"
+                    android:checked="false"
+                    android:icon="@drawable/ic_body"
+                    android:title="@string/nav_header_body_parts" />
+
+                <item
+                    android:id="@+id/nav_item_poems"
+                    android:checked="false"
+                    android:icon="@drawable/ic_poems"
+                    android:title="@string/nav_header_poems" />
+
+                <item
+                    android:id="@+id/nav_item_music_instruments"
+                    android:checked="false"
+                    android:icon="@drawable/ic_music"
+                    android:title="@string/nav_header_music_instruments" />
+
+                <item
+                    android:id="@+id/nav_item_vehicles"
+                    android:checked="false"
+                    android:icon="@drawable/ic_vehicles"
+                    android:title="@string/nav_header_vehicles" />
+
+            </menu>
+
+        </item>
+
+        <item
+            android:id="@+id/nav_item_settings"
+            android:title="@string/nav_header_settings">
+
+            <menu>
+
+                <item
+                    android:id="@+id/nav_item_preferences"
+                    android:checked="false"
+                    android:icon="@drawable/ic_prefs"
+                    android:title="@string/nav_header_preferences" />
+
+            </menu>
+
+        </item>
+
+    </group>
+
+</menu>
