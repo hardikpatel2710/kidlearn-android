@@ -6,15 +6,19 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.incept.kidlearn.alphabet.AlphabetFragment;
@@ -25,13 +29,22 @@ import com.incept.kidlearn.utils.storage.PreferencesHelper;
  * Created by Hardik Patel on 05/01/18.
  */
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
     public static final int PERMISSION_CAMERA = 101;
     public static final int PERMISSION_WRITE = 102;
+
+    public static final String ARGS_KID_NAME_KEY = "kidName";
+    public static final String ARGS_LANGUAGE_KEY = "language";
+
     private final String CLASS_NAME = "MainActivity: ";
+
     private DrawerLayout drawerLayout = null;
     private Toolbar appToolbar = null;
+
+    private TextView toolbarTitle = null;
+    private ImageView toolbarMenu = null;
+    private ImageView toolbarBack = null;
 
     private DataReceiver dataReceiver = null;
 
@@ -50,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getViewReferences() {
+        Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "getViewReferences().");
+
         // Set application tool bar.
         appToolbar = findViewById(R.id.app_toolbar);
         setSupportActionBar(appToolbar);
@@ -57,8 +72,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawerLayout = findViewById(R.id.navigation_drawer);
 
         // Toolbar view references.
-        ImageView toolbarMenu = findViewById(R.id.btn_toolbar_menu);
-        ImageView toolbarBack = findViewById(R.id.btn_toolbar_back);
+        toolbarTitle = findViewById(R.id.text_view_toolbar_title);
+        toolbarMenu = findViewById(R.id.btn_toolbar_menu);
+        toolbarBack = findViewById(R.id.btn_toolbar_back);
 
         toolbarMenu.setOnClickListener(this);
         toolbarBack.setOnClickListener(this);
@@ -98,7 +114,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "loadFragment() - Profile details " +
                 "are present, loading AlphabetFragment.");
 
+        Bundle kidProfileArgs = new Bundle();
+        kidProfileArgs.putString(ARGS_KID_NAME_KEY, firstName + " " + lastName);
+        kidProfileArgs.putString(ARGS_LANGUAGE_KEY, "");
+
         AlphabetFragment alphabetFragment = new AlphabetFragment();
+        alphabetFragment.setArguments(kidProfileArgs);
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -108,6 +129,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "onClick().");
+
         switch (view.getId()) {
             case R.id.btn_toolbar_menu:
                 openNavigationDrawer();
@@ -122,21 +145,82 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void openNavigationDrawer() {
+        Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "openNavigationDrawer().");
+
         // If navigation drawer is closed, open it.
         if (!drawerLayout.isDrawerOpen(Gravity.LEFT)) {
             drawerLayout.openDrawer(Gravity.LEFT);
         }
 
+        NavigationView navigationView = findViewById(R.id.app_navigation);
+        View headerLayout = navigationView.getHeaderView(0);
+
         // Navigation drawer view references.
-        ImageView drawerBack = findViewById(R.id.btn_navigation_back);
+        ImageView drawerBack = headerLayout.findViewById(R.id.btn_navigation_back);
         drawerBack.setOnClickListener(this);
     }
 
     private void closeNavigationDrawer() {
+        Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "closeNavigationDrawer().");
+
         // If navigation drawer is open, close it.
         if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
             drawerLayout.closeDrawer(Gravity.LEFT);
         }
+    }
+
+    public void setToolbarTitle(String title) {
+        Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "setToolbarTitle().");
+
+        if (!TextUtils.isEmpty(title)) {
+            toolbarTitle.setText(title);
+        }
+    }
+
+    public void showMenuIcon(boolean isVisible) {
+        Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "showMenuIcon().");
+
+        if (isVisible) {
+            toolbarMenu.setVisibility(View.VISIBLE);
+        } else {
+            toolbarMenu.setVisibility(View.GONE);
+        }
+    }
+
+    public void showBackIcon(boolean isVisible) {
+        Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "showBackIcon().");
+
+        if (isVisible) {
+            toolbarBack.setVisibility(View.VISIBLE);
+        } else {
+            toolbarBack.setVisibility(View.GONE);
+        }
+    }
+
+    public void setNavigationDrawer(String kidName, String language) {
+        Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "setNavigationDrawer().");
+
+        // Version 23.1.0 switches NavigationView to using a RecyclerView, instead of ListView.
+        // This means it is not instantly available to call findViewById() - a layout pass is
+        // needed before it is attached to the NavigationView.
+        // For version 23.1.1 of the Support Library, you can now get a reference to the
+        // header view using getHeaderView():
+        NavigationView navigationView = findViewById(R.id.app_navigation);
+        View headerLayout = navigationView.getHeaderView(0);
+
+        // If we try to do find view by id directly, NullPoinerException will be thrown.
+        TextView textViewKidName = headerLayout.findViewById(R.id.nav_kid_name);
+        TextView textViewLanguage = headerLayout.findViewById(R.id.nav_language_short);
+
+        if (!TextUtils.isEmpty(kidName)) {
+            textViewKidName.setText(kidName);
+        }
+
+        if (!TextUtils.isEmpty(language)) {
+            textViewLanguage.setText(language);
+        }
+
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     /**
@@ -237,6 +321,128 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 return;
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "onNavigationItemSelected().");
+
+        switch (item.getItemId()) {
+            case R.id.nav_item_alphabets:
+                Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "Navigation item Alphabets selected.");
+
+                // item.setChecked(true);
+                closeNavigationDrawer();
+                setToolbarTitle(getString(R.string.alphabets_screen_title));
+
+                break;
+            case R.id.nav_item_numbers:
+                Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "Navigation item Numbers selected.");
+
+                // item.setChecked(true);
+                closeNavigationDrawer();
+                setToolbarTitle(getString(R.string.numbers_screen_title));
+
+                break;
+            case R.id.nav_item_colors:
+                Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "Navigation item Colors selected.");
+
+                // item.setChecked(true);
+                closeNavigationDrawer();
+                setToolbarTitle(getString(R.string.colors_screen_title));
+
+                break;
+            case R.id.nav_item_birds:
+                Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "Navigation item Birds selected.");
+
+                // item.setChecked(true);
+                closeNavigationDrawer();
+                setToolbarTitle(getString(R.string.birds_screen_title));
+
+                break;
+            case R.id.nav_item_fruits:
+                Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "Navigation item Fruits selected.");
+
+                // item.setChecked(true);
+                closeNavigationDrawer();
+                setToolbarTitle(getString(R.string.fruits_screen_title));
+
+                break;
+            case R.id.nav_item_animals:
+                Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "Navigation item Animals selected.");
+
+                // item.setChecked(true);
+                closeNavigationDrawer();
+                setToolbarTitle(getString(R.string.animals_screen_title));
+
+                break;
+            case R.id.nav_item_shapes:
+                Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "Navigation item Shapes selected.");
+
+                // item.setChecked(true);
+                closeNavigationDrawer();
+                setToolbarTitle(getString(R.string.shapes_screen_title));
+
+                break;
+            case R.id.nav_item_vegetables:
+                Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "Navigation item Vegetables selected.");
+
+                // item.setChecked(true);
+                closeNavigationDrawer();
+                setToolbarTitle(getString(R.string.vegetables_screen_title));
+
+                break;
+            case R.id.nav_item_stars:
+                Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "Navigation item Stars selected.");
+
+                // item.setChecked(true);
+                closeNavigationDrawer();
+                setToolbarTitle(getString(R.string.stars_screen_title));
+
+                break;
+            case R.id.nav_item_body_parts:
+                Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "Navigation item Body Parts selected.");
+
+                // item.setChecked(true);
+                closeNavigationDrawer();
+                setToolbarTitle(getString(R.string.body_parts_screen_title));
+
+                break;
+            case R.id.nav_item_poems:
+                Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "Navigation item Poems selected.");
+
+                // item.setChecked(true);
+                closeNavigationDrawer();
+                setToolbarTitle(getString(R.string.poems_screen_title));
+
+                break;
+            case R.id.nav_item_music_instruments:
+                Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "Navigation item Music Instruments selected.");
+
+                // item.setChecked(true);
+                closeNavigationDrawer();
+                setToolbarTitle(getString(R.string.music_instru_screen_title));
+
+                break;
+            case R.id.nav_item_vehicles:
+                Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "Navigation item Vehicles selected.");
+
+                // item.setChecked(true);
+                closeNavigationDrawer();
+                setToolbarTitle(getString(R.string.vehicles_screen_title));
+
+                break;
+            case R.id.nav_item_preferences:
+                Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "Navigation item Preferences selected.");
+
+                // item.setChecked(true);
+                closeNavigationDrawer();
+                setToolbarTitle(getString(R.string.preferences_screen_title));
+
+                break;
+        }
+
+        return true;
     }
 
     /**

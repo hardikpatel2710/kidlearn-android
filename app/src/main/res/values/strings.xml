@@ -29,6 +29,27 @@
 
     <!-- ToolBar title labels -->
     <string name="profile_screen_title">Kid Profile</string>
+    <string name="alphabets_screen_title">Alphabets</string>
+    <string name="numbers_screen_title">Numbers</string>
+    <string name="colors_screen_title">Colors</string>
+    <string name="birds_screen_title">Birds</string>
+    <string name="fruits_screen_title">Fruits</string>
+    <string name="animals_screen_title">Animals</string>
+    <string name="shapes_screen_title">Shapes</string>
+    <string name="vegetables_screen_title">Vegetables</string>
+    <string name="stars_screen_title">Stars</string>
+    <string name="body_parts_screen_title">Body Parts</string>
+    <string name="poems_screen_title">Poems</string>
+    <string name="music_instru_screen_title">Music Instruments</string>
+    <string name="vehicles_screen_title">Vehicles</string>
+    <string name="preferences_screen_title">Preferences</string>
+
+
+    <!-- Language short names -->
+    <string name="language_english_short">Eng</string>
+    <string name="language_gujarati_short">Guj</string>
+    <string name="language_hindi_short">Hin</string>
+    <string name="language_marathi_short">Mar</string>
 
     <!-- Profile screen labels -->
     <string name="profile_first_name">First Name</string>

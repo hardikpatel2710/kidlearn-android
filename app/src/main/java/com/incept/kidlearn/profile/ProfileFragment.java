@@ -4,6 +4,8 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 import com.incept.kidlearn.FlavorSpecific;
 import com.incept.kidlearn.MainActivity;
 import com.incept.kidlearn.R;
+import com.incept.kidlearn.alphabet.AlphabetFragment;
 import com.incept.kidlearn.utils.common.CommonUtility;
 import com.incept.kidlearn.utils.storage.FileHelper;
 import com.incept.kidlearn.utils.storage.PreferencesHelper;
@@ -49,13 +52,18 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
     public static final String FIRST_NAME_PREFS_KEY = "firstName";
     public static final String LAST_NAME_PREFS_KEY = "lastName";
     public static final String DATE_OF_BIRTH_PREFS_KEY = "dateOfBirth";
-    private static final String KID_PROFILE_SHARED_PREFS_FILE_NAME = "profile_shared_prefs";
     private static final String IMAGE_NAME_PREFS_KEY = "imageName";
     private static final String IMAGE_PATH_PREFS_KEY = "imagePath";
-    private static final String PROFILE_IMAGE_FILE_NAME = "ProfileImage.png";
+
+    private static final String KID_PROFILE_SHARED_PREFS_FILE_NAME = "profile_shared_prefs";
+
     private static final int CAMERA_REQUEST_CODE = 10001;
     private static final int GALLERY_REQUEST_CODE = 10002;
+
+    private static final String PROFILE_IMAGE_FILE_NAME = "ProfileImage.png";
+
     private final String CLASS_NAME = "ProfileFragment: ";
+
     private MainActivity mainActivity = null;
 
     private CircleImageView imageViewProfileImage = null;
@@ -79,10 +87,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
         Log.i(FlavorSpecific.APP_LOG_TAG, CLASS_NAME + "onCreateView().");
 
         View profileView = inflater.inflate(R.layout.fragment_profile, null);
-
-        // Set ToolBar title.
         mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(getString(R.string.profile_screen_title));
+
+        // Set ToolBar title. Hide ToolBar Menu and Back buttons.
+        mainActivity.setToolbarTitle(getString(R.string.profile_screen_title));
+        mainActivity.showMenuIcon(false);
+        mainActivity.showBackIcon(false);
 
         // Get views references and attach click listener.
         imageViewProfileImage = profileView.findViewById(R.id.profile_image);
@@ -136,6 +146,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
                     saveProfileInSharedPrefs();
 
                     // Save kid profile in database.
+
+                    // After saving profile, load Alphabet Fragment.
+                    AlphabetFragment alphabetFragment = new AlphabetFragment();
+
+                    // Remove current Fragment from stack.
+                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.fragment_container, alphabetFragment);
+                    transaction.commit();
                 }
                 break;
         }
